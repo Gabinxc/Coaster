@@ -1,0 +1,12 @@
+version: '3.7'
+services:
+    wikicoaster:
+        image: 'mysql:latest'
+        environment:
+            MYSQL_ROOT_PASSWORD: Qwq7ATDSpsW936V8gkvX2B
+            MYSQL_DATABASE: wikicoaster
+            MYSQL_PASSWORD: Qwq7ATDSpsW936V8gkvX2B
+            MYSQL_USER: toto
+            MYSQL_ALLOW_EMPTY_PASSWORD: yes
+        ports:
+            - "3306:3306"

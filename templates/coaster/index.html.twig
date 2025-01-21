@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    {% include "utils/_pagination.html.twig" with {'route' : 'coaster_index'} %}
+    <form>
+        <select name="park" id="park-select">
+            <option value="">Tous les parcs</option>
+            {% for park in parks %}#[IsGranted('ROLE_USER')]
+            <option value="{{ park.id }}">{{ park.name }}</option>
+                {% endfor %}
+        </select>
+        <select name="categories" id="categories-select">
+            <option value="">Toutes les categories</option>
+            {% for c in categories %}
+                <option value="{{ c.id }}">{{ c.name }}</option>
+            {% endfor %}
+        </select>
+        <input type="text" name="search">
+        <input type="submit" />
+    </form>
+    {% for line in coasters %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Nom: {{ line.name }}</h5>
+                <p class="card-text">Longeur: {{ line.length }}</p>
+                <p class="card-text">Hauteur: {{ line.maxHeight }}</p>
+                <p class="card-text">Vitesse: {{ line.maxSpeed }}</p>
+                <p class="card-text">En operation: {{ line.operating }}</p>
+                <p class="card-text">Park: {{ line.park() == null ? "Aucun" : line.park.name }}</p>
+                <ul>
+                    {% for element in line.categories() %}
+                        <li>{{ element.name }}</li>
+                    {% endfor %}
+                </ul>
+                {% if is_granted('ROLE_USER') %}
+                <button onclick="location.href = '{{ path('coaster_edit', {'id': line.id}) }}'">Modifier</button>
+                <button onclick="location.href = '{{ path('coaster_delete', {'id': line.id, '_token': csrf_token('delete' ~ line.id)}) }}'">Supprimer</button>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+    {% if is_granted('ROLE_USER') %}
+    <button onclick="location.href = '{{ path('coaster_add') }}'">Ajouter</button>
+    {% endif %}
+{% endblock %}
+
